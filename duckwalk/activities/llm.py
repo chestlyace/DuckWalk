@@ -39,12 +39,12 @@ def generate(prompt: str, *, stage: str, model: str | None = None, timeout_s: fl
                 json={"model": model, "prompt": prompt, "stream": False, "think": False},
                 timeout=timeout_s,
             )
-        except httpx.TimeoutException as e:
+        except httpx.TimeoutException:
             span.set_status("deadline_exceeded")
-            raise OllamaError(f"{stage}: Ollama timed out after {timeout_s:.0f}s") from e
+            raise OllamaError(f"{stage}: Ollama timed out after {timeout_s:.0f}s") from None
         except httpx.HTTPError as e:
             span.set_status("unavailable")
-            raise OllamaError(f"{stage}: Ollama not reachable at {config.OLLAMA_URL} ({e.__class__.__name__})") from e
+            raise OllamaError(f"{stage}: Ollama not reachable at {config.OLLAMA_URL} ({e.__class__.__name__})") from None
         if res.is_error:
             span.set_status("internal_error")
             raise OllamaError(f"{stage}: Ollama returned {res.status_code}: {res.json().get('error', res.text)[:200]}")

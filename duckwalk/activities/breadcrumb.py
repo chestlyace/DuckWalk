@@ -50,15 +50,15 @@ def format_state(state: dict) -> str:
     )
 
 
-def _prompt(name: str, state: dict) -> str:
+def render_prompt(name: str, state: dict) -> str:
     return (PROMPTS / f"{name}.txt").read_text().replace("{state}", format_state(state))
 
 
 def summarize(state: dict) -> llm.LLMResult:
-    return llm.generate(_prompt("summary", state), stage="summary")
+    return llm.generate(render_prompt("summary", state), stage="summary")
 
 
 def nudge(state: dict) -> llm.LLMResult:
-    result = llm.generate(_prompt("nudge", state), stage="nudge")
+    result = llm.generate(render_prompt("nudge", state), stage="nudge")
     result.text = result.text.strip().strip('"').strip()
     return result

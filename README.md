@@ -32,3 +32,18 @@ uv run python -m duckwalk.daemon.detector --synthetic stuck   # P(stuck) for a s
 ```
 
 Set `DUCKWALK_REPOS` and `TABPFN_TOKEN` in `.env` first. Runtime data stays in `~/.duckwalk` (editor and run event logs, terminal log, `windows.db`), and the editor extension logs file paths only, never contents.
+
+## Walk sessions (Temporal)
+
+`scripts/install_daemon.sh` also runs the Temporal dev server (state kept in `~/.duckwalk/temporal.db`) and the WalkSession worker as systemd user services. With them running:
+
+```bash
+S="uv run python -m duckwalk.workflows.starter"
+$S trigger --fixture failing_test     # start a session (or --repo PATH to capture a real repo)
+$S status                             # stage of the latest session
+$S signal                             # fake "phone is moving"
+$S result                             # wait for and print the nudge, summary and brief
+bash scripts/drill_ollama_kill.sh     # failure drill: stop Ollama mid-session (needs sudo)
+```
+
+Set `DUCKWALK_AUTO_NUDGE=1` in `.env` to let the daemon start sessions when P(stuck) crosses the threshold. The Temporal UI is at http://localhost:8233.

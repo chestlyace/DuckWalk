@@ -2,12 +2,25 @@
   "name": "duckwalk-signals",
   "displayName": "DuckWalk Signals",
   "description": "Logs local editing signals (edits, undo/redo, saves, active file) for the DuckWalk stuck detector. File paths only, never file contents.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "duckwalk",
   "license": "MIT",
-  "repository": { "type": "git", "url": "https://github.com/chestlyace/DuckWalk" },
-  "engines": { "vscode": "^1.80.0" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chestlyace/DuckWalk"
+  },
+  "engines": {
+    "vscode": "^1.80.0"
+  },
   "main": "./extension.js",
-  "activationEvents": ["onStartupFinished"],
-  "contributes": {}
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {},
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": true
+  }
 }

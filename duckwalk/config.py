@@ -37,6 +37,7 @@ REPOS = [Path(r).expanduser() for r in os.environ.get("DUCKWALK_REPOS", "").spli
 WINDOW_MINUTES = 5
 BREAK_GAP_MINUTES = 5  # no editor event and no `dw` run for this long counts as a break
 STUCK_THRESHOLD = float(os.environ.get("DUCKWALK_STUCK_THRESHOLD", "0.7"))
+AUTO_NUDGE = os.environ.get("DUCKWALK_AUTO_NUDGE", "0") == "1"  # daemon starts WalkSessions when P(stuck) > threshold
 
 TEMPORAL_BIN = VENDOR / "bin" / "temporal"
 WHISPER_BIN = VENDOR / "whisper.cpp" / "build" / "bin" / "whisper-cli"

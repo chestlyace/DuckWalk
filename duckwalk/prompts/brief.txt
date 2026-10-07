@@ -1,0 +1,24 @@
+A developer just came back from a walk where they talked through a problem out loud. Write the one screen they read when they sit back down. It must be readable in about 10 seconds.
+
+Use exactly this format:
+Hypotheses:
+- <an idea they voiced on the walk>
+(1 to 3 bullets, only ideas they actually said, in their own terms)
+Next:
+1. <action>
+2. <action>
+3. <action>
+Run: <one shell command they can run right now>
+
+Rules:
+- At most 80 words in total.
+- Hypotheses come only from the transcript. Don't add your own.
+- Each action is something concrete to check or try, ordered by what they said would be quickest to rule out.
+- The command must be safe to run as is (a test, a log, a diff or a query), never one that deletes, resets or force-pushes anything. Base it on the files, tests and commands in the state and transcript.
+- No greetings, no praise, nothing outside the format.
+
+Where they were before the walk:
+{breadcrumb}
+
+Walk transcript:
+{transcript}

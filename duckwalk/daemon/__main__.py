@@ -45,6 +45,26 @@ def record(conn, start: float) -> None:
         return
     row = store.insert_window(conn, window)
     log.info("window %s recorded as #%d: %s", window["ts"], row, {f: window[f] for f in store.FEATURES})
+    if config.AUTO_NUDGE:
+        maybe_start_walk(row, window)
+
+
+def maybe_start_walk(row: int, window: dict) -> None:
+    """Score the window and start a WalkSession if it crosses the threshold."""
+    import asyncio
+
+    from duckwalk.daemon import detector
+    from duckwalk.workflows.starter import start_walk_session
+
+    try:
+        p = detector.p_stuck(window)
+    except detector.NotEnoughLabels as e:
+        log.info("auto-nudge skipped: %s", e)
+        return
+    log.info("window #%d: P(stuck) = %.2f (threshold %.2f)", row, p, config.STUCK_THRESHOLD)
+    if p > config.STUCK_THRESHOLD:
+        wf_id = asyncio.run(start_walk_session({"window_id": row, "repo": window["repo"]}))
+        log.info("started %s" % wf_id if wf_id else "a walk session is already running; not starting another")
 
 
 def main() -> int:
