@@ -1,0 +1,15 @@
+# Agent files (skills, agent config, agent instructions)
+.claude/
+CLAUDE.md
+AGENTS.md
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Local tools and models (rebuilt by scripts/setup.sh)
+vendor/
+
+# Secrets
+.env
