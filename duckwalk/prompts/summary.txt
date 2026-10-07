@@ -1,0 +1,15 @@
+You are summarizing a developer's working state before they walk away from the desk, so they can pick up exactly where they left off when they return.
+
+Write three short lines, in this format:
+Doing: <what they were trying to do>
+Failing: <what is failing, citing the concrete test, error or file from the state>
+Next: <the single next thing to investigate>
+
+Rules:
+- At most 60 words in total.
+- "Next" is something to look into or check, never a solution. Never say what code to write, change, add or remove. Good: "Check whether the fixture resets the database between tests." Bad: "Add db.reset() to setUp."
+- Use only facts from the state below. If something is missing or unknown, don't invent it.
+- No greetings, no encouragement, no advice beyond the three lines.
+
+State:
+{state}

@@ -1,0 +1,52 @@
+[
+  {
+    "id": "failing_test",
+    "description": "A pytest assertion keeps failing after repeated edits to the same service file.",
+    "state": {
+      "branch": "feat/invoice-rounding",
+      "diff": " billing/invoice.py            | 18 +++++++++++-------\n tests/test_invoice.py         |  6 ++++--\n 2 files changed, 15 insertions(+), 9 deletions(-)",
+      "last_error": "============================= FAILURES =============================\n____________________ test_total_with_discount _____________________\n\n    def test_total_with_discount():\n        inv = Invoice(items=[Item(price=Decimal('19.99'), qty=3)], discount=0.15)\n>       assert inv.total() == Decimal('50.97')\nE       AssertionError: assert Decimal('50.98') == Decimal('50.97')\n\ntests/test_invoice.py:42: AssertionError\n==================== 1 failed, 23 passed in 0.84s ====================",
+      "open_files": ["billing/invoice.py", "tests/test_invoice.py"]
+    }
+  },
+  {
+    "id": "merge_conflict",
+    "description": "A rebase onto main stopped on conflicts in two files.",
+    "state": {
+      "branch": "feat/user-settings",
+      "diff": " src/api/routes.ts      | 24 ++++++++++++++++++++----\n src/models/user.ts     | 11 +++++++++--\n 2 files changed, 29 insertions(+), 6 deletions(-)",
+      "last_error": "Auto-merging src/models/user.ts\nCONFLICT (content): Merge conflict in src/models/user.ts\nAuto-merging src/api/routes.ts\nCONFLICT (content): Merge conflict in src/api/routes.ts\nerror: could not apply 3f9c2ab... Add notification preferences to user settings\nhint: Resolve all conflicts manually, mark them as resolved with\nhint: \"git add/rm <conflicted_files>\", then run \"git rebase --continue\".",
+      "open_files": ["src/models/user.ts", "src/api/routes.ts"]
+    }
+  },
+  {
+    "id": "flaky_build",
+    "description": "An integration test times out on some runs and passes on others.",
+    "state": {
+      "branch": "fix/order-sync",
+      "diff": " services/sync/worker.go       | 9 ++++++---\n services/sync/worker_test.go  | 4 ++--\n 2 files changed, 8 insertions(+), 5 deletions(-)",
+      "last_error": "=== RUN   TestOrderSyncRetries\n    worker_test.go:88: timed out waiting for 3 sync events, got 2\n--- FAIL: TestOrderSyncRetries (5.01s)\nFAIL\nFAIL    github.com/acme/shop/services/sync    5.214s\n# previous run (2 minutes ago): ok  github.com/acme/shop/services/sync  1.902s\n# run before that: FAIL TestOrderSyncRetries (5.00s)",
+      "open_files": ["services/sync/worker.go", "services/sync/worker_test.go"]
+    }
+  },
+  {
+    "id": "runtime_type_error",
+    "description": "The React app crashes on load with an undefined property error after an API change.",
+    "state": {
+      "branch": "feat/dashboard-cards",
+      "diff": " src/components/StatsCard.tsx  | 31 ++++++++++++++++++++++---------\n src/hooks/useStats.ts         |  7 ++++---\n 2 files changed, 26 insertions(+), 12 deletions(-)",
+      "last_error": "Uncaught TypeError: Cannot read properties of undefined (reading 'map')\n    at StatsCard (StatsCard.tsx:27:32)\n    at renderWithHooks (react-dom.development.js:15486:18)\n    at mountIndeterminateComponent (react-dom.development.js:20103:13)\nThe above error occurred in the <StatsCard> component.",
+      "open_files": ["src/components/StatsCard.tsx", "src/hooks/useStats.ts"]
+    }
+  },
+  {
+    "id": "migration_error",
+    "description": "A Django migration fails on the existing local database.",
+    "state": {
+      "branch": "feat/project-archiving",
+      "diff": " projects/models.py                        | 3 +++\n projects/migrations/0014_project_archived.py | 22 ++++++++++++++++++++++\n 2 files changed, 25 insertions(+)",
+      "last_error": "Running migrations:\n  Applying projects.0014_project_archived...Traceback (most recent call last):\n  ...\ndjango.db.utils.IntegrityError: column \"archived_at\" of relation \"projects_project\" contains null values",
+      "open_files": ["projects/models.py", "projects/migrations/0014_project_archived.py"]
+    }
+  }
+]

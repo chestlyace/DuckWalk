@@ -1,0 +1,11 @@
+Write a one-line push notification that invites a developer to step away from the screen for a short walk outside.
+
+Rules:
+- Exactly one sentence, at most 20 words.
+- Mention one real detail from the state below (the failing test, the error, the file or the branch) so it's clearly about their work right now.
+- Make the walk sound like a way to think the problem through, not a break from it.
+- No lecturing, no health advice, no guilt, no emoji, no quotation marks, no hashtags.
+- Output only the sentence.
+
+State:
+{state}
