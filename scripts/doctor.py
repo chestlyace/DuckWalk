@@ -95,6 +95,30 @@ def check_piper() -> tuple[bool, str]:
     return True, f"{config.PIPER_VOICE}: synthesized {seconds:.1f}s of audio"
 
 
+def check_audio() -> tuple[bool, str]:
+    import numpy as np
+    import sounddevice as sd
+
+    from duckwalk.voice.audio import FRAME, LiveMic
+
+    dev_in, dev_out = sd.query_devices(kind="input"), sd.query_devices(kind="output")
+    mic = LiveMic()
+    mic.start()
+    frames = [mic.read(timeout=2) for _ in range(12)]
+    mic.stop()
+    frames = [f for f in frames[4:] if f is not None]  # the first frames hold a start-up pop
+    if not frames:
+        return False, f"mic '{dev_in['name']}' opened but delivered no audio"
+    frame = np.concatenate(frames)
+    from duckwalk.voice import vad
+
+    vad._load()
+    with sd.OutputStream(samplerate=22050, channels=1, dtype="int16"):
+        pass  # opening the speaker is enough; this makes no sound
+    level = float(np.sqrt(np.mean(frame.astype(np.float32) ** 2)))
+    return True, f"in: {dev_in['name'][:28]} (level {level:.0f}), out: {dev_out['name'][:28]}, Silero VAD loaded"
+
+
 def check_sentry(send_test: bool) -> tuple[bool, str]:
     from duckwalk.telemetry import init_sentry
 
@@ -123,6 +147,7 @@ def main() -> int:
         ("Temporal", check_temporal),
         ("whisper.cpp", check_whisper),
         ("Piper", check_piper),
+        ("Audio", check_audio),
         ("Sentry", lambda: check_sentry(args.sentry_test)),
     ]
     all_ok = True

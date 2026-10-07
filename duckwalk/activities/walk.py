@@ -19,17 +19,6 @@ PROMPTS = Path(__file__).resolve().parent.parent / "prompts"
 FIXTURES = config.ROOT / "eval" / "fixtures" / "states.json"
 LLM_HTTP_TIMEOUT_S = 25  # below the 30s start-to-close timeout, so a hung call fails as a clean OllamaError
 
-# Phase 3 stand-in for the Phase 4 voice loop: a plausible walk monologue about the failing_test fixture.
-CANNED_TRANSCRIPT = (
-    "Okay so the invoice total is off by one cent, 50.98 instead of 50.97. "
-    "Three items at 19.99 is 59.97, minus fifteen percent. I think the discount is rounded per item "
-    "and then summed, so each item rounds up a little and it adds up to an extra cent. "
-    "Or maybe it's float, the discount is 0.15 as a float, not a Decimal, so the multiplication isn't exact. "
-    "Actually the test passes a float discount, so both could be true. "
-    "The quickest check is to print each line total before summing and see where the cent appears."
-)
-
-
 def traced(fn):
     """Run an activity inside a Sentry transaction named after it."""
     @functools.wraps(fn)
@@ -69,9 +58,22 @@ def push_to_phone(nudge: str) -> None:
 
 @activity.defn
 @traced
-def voice_loop(ctx: dict) -> str:
-    """Phase 3 stand-in: return a canned transcript. Phase 4 replaces this with the real voice loop."""
-    return CANNED_TRANSCRIPT
+def voice_loop(inputs: dict) -> str:
+    """The real voice loop: a spoken Socratic conversation. Returns the transcript.
+
+    `inputs["voice_script"]` (a list of strings) replaces the mic and speaker for tests.
+    A retried attempt resumes from the transcript saved under the workflow id.
+    """
+    from duckwalk.voice.audio import LiveMic, ScriptedMic
+    from duckwalk.voice.duck import Duck
+    from duckwalk.voice.tts import Speaker, make_tts
+
+    script = inputs.get("voice_script")
+    mic = ScriptedMic(script) if script else LiveMic()
+    speaker = Speaker(make_tts(), play=not script)
+    path = config.TRANSCRIPTS_DIR / f"{activity.info().workflow_id}.json"
+    duck = Duck(inputs["summary"], mic, speaker, on_tick=activity.heartbeat, transcript_path=path)
+    return duck.run()["transcript"]
 
 
 @activity.defn

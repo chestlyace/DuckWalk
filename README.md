@@ -47,3 +47,16 @@ bash scripts/drill_ollama_kill.sh     # failure drill: stop Ollama mid-session (
 ```
 
 Set `DUCKWALK_AUTO_NUDGE=1` in `.env` to let the daemon start sessions when P(stuck) crosses the threshold. The Temporal UI is at http://localhost:8233.
+
+## Voice duck
+
+A hands-free Socratic conversation: mic → Silero VAD → whisper.cpp → Gemma (streamed) → Piper → speaker. The duck asks questions and never gives the answer. Say "end walk" to finish (30 minute cap).
+
+```bash
+uv run python -m duckwalk.voice --mic-test                 # does the mic, VAD and whisper hear you?
+uv run python -m duckwalk.voice --fixture failing_test     # talk to the duck from the laptop
+uv run python -m duckwalk.voice --script eval/voice/scripts/rounding.json   # scripted user, no sound (regression + latency)
+uv run python -m duckwalk.voice.report eval/voice/transcripts               # per-turn latency table
+```
+
+Transcripts and per-turn metrics are saved to `~/.duckwalk/transcripts/`. Piper is the offline default. Set `DUCKWALK_TTS=elevenlabs`, `ELEVENLABS_API_KEY` and `ELEVENLABS_VOICE_ID` in `.env` to opt in to ElevenLabs, which sends the duck's replies to ElevenLabs' servers. `starter trigger --voice-script FILE` runs a whole walk session with a scripted user.

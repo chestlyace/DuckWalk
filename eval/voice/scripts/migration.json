@@ -1,0 +1,8 @@
+[
+  "My Django migration fails on my local database. It says a column contains null values when I add archived at.",
+  "I added the field as not null without a default. The table already has rows in it, so that must be the problem.",
+  "I think the existing rows have nothing to put in the new column. I'm not sure how the migration is supposed to handle that.",
+  "I could check whether the production table has rows too, because this will fail there the same way.",
+  "So I need to decide what value old rows should get before I decide how the field is defined.",
+  "end walk"
+]

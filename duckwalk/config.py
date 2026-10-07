@@ -39,6 +39,17 @@ BREAK_GAP_MINUTES = 5  # no editor event and no `dw` run for this long counts as
 STUCK_THRESHOLD = float(os.environ.get("DUCKWALK_STUCK_THRESHOLD", "0.7"))
 AUTO_NUDGE = os.environ.get("DUCKWALK_AUTO_NUDGE", "0") == "1"  # daemon starts WalkSessions when P(stuck) > threshold
 
+# Voice loop
+TRANSCRIPTS_DIR = HOME / "transcripts"
+VOICE_MAX_MINUTES = 30  # hard cap on one walk conversation
+STOP_PHRASE = "end walk"  # say this to finish the conversation
+TTS_ENGINE = os.environ.get("DUCKWALK_TTS", "piper")  # "piper" (offline, default) or "elevenlabs" (opt-in, needs internet)
+ELEVENLABS_API_KEY = os.environ.get("ELEVENLABS_API_KEY", "")
+ELEVENLABS_VOICE_ID = os.environ.get("ELEVENLABS_VOICE_ID", "")
+ELEVENLABS_MODEL = os.environ.get("ELEVENLABS_MODEL", "eleven_flash_v2_5")
+AUDIO_INPUT = os.environ.get("DUCKWALK_AUDIO_IN", "")  # sounddevice name or index; empty = system default
+AUDIO_OUTPUT = os.environ.get("DUCKWALK_AUDIO_OUT", "")
+
 TEMPORAL_BIN = VENDOR / "bin" / "temporal"
 WHISPER_BIN = VENDOR / "whisper.cpp" / "build" / "bin" / "whisper-cli"
 WHISPER_MODEL = VENDOR / "whisper.cpp" / "models" / "ggml-base.en.bin"

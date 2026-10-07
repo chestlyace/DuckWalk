@@ -51,6 +51,8 @@ async def _main(args) -> int:
     client = await _client()
     if args.cmd == "trigger":
         ctx = {"window_id": args.window_id, "repo": args.repo, "fixture": args.fixture}
+        if args.voice_script:
+            ctx["voice_script"] = json.loads(open(args.voice_script).read())
         if args.move_timeout:
             ctx["move_timeout_s"] = args.move_timeout
         wf_id = await start_walk_session(ctx)
@@ -89,6 +91,7 @@ def main() -> int:
     t.add_argument("--fixture", help="use an eval/fixtures state instead of capturing the repo")
     t.add_argument("--repo", help="repo to capture (default: this repo)")
     t.add_argument("--window-id", type=int, help="windows.db row to record the outcome on")
+    t.add_argument("--voice-script", help="JSON list of things the user says; replaces the mic and speaker (testing)")
     t.add_argument("--move-timeout", type=int, help="seconds to wait for movement (testing; default 600)")
     for name in ("signal", "status", "result"):
         sub.add_parser(name).add_argument("workflow_id", nargs="?")

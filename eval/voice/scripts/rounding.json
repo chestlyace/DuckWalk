@@ -1,0 +1,8 @@
+[
+  "I've got an invoice test failing. The total comes out as fifty point nine eight, but the test expects fifty point nine seven.",
+  "I think the discount gets rounded for each item and then added up, so each item rounds up a little.",
+  "I haven't checked that yet. The test passes the discount as a float, not a decimal, which might matter too.",
+  "The quickest check would be to print each line total before the sum and see where the extra cent appears.",
+  "Right, so first I'll print the line totals, then try the same test with a decimal discount.",
+  "end walk"
+]

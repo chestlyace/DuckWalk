@@ -1,0 +1,8 @@
+[
+  "I've got an integration test in Go that times out sometimes and passes other times. It waits for three sync events but only gets two.",
+  "It fails maybe one run in three. I changed the retry logic in the worker just before it started.",
+  "I haven't looked at ordering. The test might be checking before the third event has been sent.",
+  "I suppose I could add a log line with timestamps when each event is sent and when the test checks.",
+  "Okay, so if the check happens first it's a race in the test, and if not it's the worker dropping an event.",
+  "end walk"
+]

@@ -61,7 +61,9 @@ class WalkSession:
 
         self.stage = "voice_loop"
         transcript = await workflow.execute_activity(
-            walk.voice_loop, ctx, start_to_close_timeout=timedelta(minutes=45), retry_policy=RetryPolicy(maximum_attempts=3)
+            walk.voice_loop, {"summary": crumb["summary"], "voice_script": ctx.get("voice_script")},
+            start_to_close_timeout=timedelta(minutes=45), heartbeat_timeout=timedelta(seconds=60),
+            retry_policy=RetryPolicy(maximum_attempts=2),
         )
         self.stage = "brief"
         brief = await workflow.execute_activity(walk.gemma_brief, {"summary": crumb["summary"], "transcript": transcript}, **LLM)

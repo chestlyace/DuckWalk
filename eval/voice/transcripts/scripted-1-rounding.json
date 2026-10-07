@@ -1,0 +1,138 @@
+{
+  "started": "2026-10-07T13:49:27",
+  "model": "gemma4:31b-cloud",
+  "tts": "piper",
+  "turns": [
+    {
+      "role": "duck",
+      "text": "So you're seeing 50.98 instead of 50.97. What part of the rounding logic in the invoice file are you looking at first?"
+    },
+    {
+      "role": "you",
+      "text": "I've got an invoice test failing, the total comes out as 50.98, but the test expects 50.97."
+    },
+    {
+      "role": "duck",
+      "text": "Got it, 50.98 instead of 50.97. Does that difference happen before or after the discount is applied?"
+    },
+    {
+      "role": "you",
+      "text": "I think the discount gets rounded for each item and then added up, so each item rounds up a little."
+    },
+    {
+      "role": "duck",
+      "text": "Rounding each item individually. What would happen if you summed the discounts before rounding?"
+    },
+    {
+      "role": "you",
+      "text": "I haven't checked that yet. The test passes the disk out as a float, not a decimal, which might matter too."
+    },
+    {
+      "role": "duck",
+      "text": "Using floats instead of decimals. Could that be where the precision is shifting?"
+    },
+    {
+      "role": "you",
+      "text": "The quickest check would be to print each line total before the sum and see where the extra cent appears."
+    },
+    {
+      "role": "duck",
+      "text": "Printing the line totals. Which specific line item do you expect to be the one rounding up?"
+    },
+    {
+      "role": "you",
+      "text": "Right, so first I'll print the line totals, then try the same test with a decimal discount."
+    },
+    {
+      "role": "duck",
+      "text": "Printing and then trying decimals. Which of those two checks would confirm if the issue is the summation order?"
+    },
+    {
+      "role": "you",
+      "text": "and walk."
+    },
+    {
+      "role": "duck",
+      "text": "Okay, ending the walk. Nice thinking out there."
+    }
+  ],
+  "metrics": [
+    {
+      "turn": 0,
+      "speech_s": 0.0,
+      "hangover_s": 0.0,
+      "stt_s": 0.0,
+      "llm_first_token_s": 0.6634998749996157,
+      "tts_first_synth_s": 1.232440771000256,
+      "reply_latency_s": null,
+      "input_tokens": 346,
+      "output_tokens": 37
+    },
+    {
+      "turn": 1,
+      "speech_s": 7.14,
+      "hangover_s": 0.7,
+      "stt_s": 4.0098305849996905,
+      "llm_first_token_s": 0.3960282449997976,
+      "tts_first_synth_s": 1.0608848719994057,
+      "reply_latency_s": 5.534805705000508,
+      "input_tokens": 402,
+      "output_tokens": 31
+    },
+    {
+      "turn": 2,
+      "speech_s": 5.284,
+      "hangover_s": 0.7,
+      "stt_s": 3.732278244999179,
+      "llm_first_token_s": 0.38775567900029273,
+      "tts_first_synth_s": 0.5656930550003381,
+      "reply_latency_s": 4.707777683000131,
+      "input_tokens": 464,
+      "output_tokens": 17
+    },
+    {
+      "turn": 3,
+      "speech_s": 6.276,
+      "hangover_s": 0.7,
+      "stt_s": 3.9530015340005775,
+      "llm_first_token_s": 0.41258472699973936,
+      "tts_first_synth_s": 0.8249536869998337,
+      "reply_latency_s": 5.329606440000134,
+      "input_tokens": 517,
+      "output_tokens": 16
+    },
+    {
+      "turn": 4,
+      "speech_s": 5.38,
+      "hangover_s": 0.7,
+      "stt_s": 3.7034723710003163,
+      "llm_first_token_s": 0.39897969599951466,
+      "tts_first_synth_s": 0.5655103300005067,
+      "reply_latency_s": 4.699778524000067,
+      "input_tokens": 563,
+      "output_tokens": 20
+    },
+    {
+      "turn": 5,
+      "speech_s": 5.22,
+      "hangover_s": 0.7,
+      "stt_s": 3.8641689330006557,
+      "llm_first_token_s": 0.5330611090003003,
+      "tts_first_synth_s": 0.5017414989997633,
+      "reply_latency_s": 5.094252144000166,
+      "input_tokens": 614,
+      "output_tokens": 22
+    },
+    {
+      "turn": 6,
+      "speech_s": 1.028,
+      "hangover_s": 0.7,
+      "stt_s": 2.871585287999551,
+      "llm_first_token_s": null,
+      "tts_first_synth_s": null,
+      "reply_latency_s": null,
+      "input_tokens": 0,
+      "output_tokens": 0
+    }
+  ]
+}

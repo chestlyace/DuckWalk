@@ -1,0 +1,138 @@
+{
+  "started": "2026-10-07T13:50:43",
+  "model": "gemma4:31b-cloud",
+  "tts": "piper",
+  "turns": [
+    {
+      "role": "duck",
+      "text": "You were looking into that timeout in the order sync retries test. Why are you only seeing two events instead of three?"
+    },
+    {
+      "role": "you",
+      "text": "I've got an integration test and go that times out sometimes and passes other times. It waits for three sync events but only gets two."
+    },
+    {
+      "role": "duck",
+      "text": "Intermittent failures. Since it passes sometimes, what's different about the runs that fail?"
+    },
+    {
+      "role": "you",
+      "text": "It fails maybe one run in three, I changed the retry logic and the worker just before it started."
+    },
+    {
+      "role": "duck",
+      "text": "You changed the retry logic and the worker. What specific part of that logic controls when a sync event is emitted?"
+    },
+    {
+      "role": "you",
+      "text": "I haven't looked at ordering, the test might be checking before the third event has been sent."
+    },
+    {
+      "role": "duck",
+      "text": "The test might be checking too early. If you increased the wait time, would the third event eventually arrive?"
+    },
+    {
+      "role": "you",
+      "text": "I suppose I could add a log line with timestamps when each event is sent and when the test checks."
+    },
+    {
+      "role": "duck",
+      "text": "Adding timestamps for the events and the check. What would those logs prove about the timing?"
+    },
+    {
+      "role": "you",
+      "text": "Okay, so if the check happens first it's a race and the test, and if not it's the worker dropping an event."
+    },
+    {
+      "role": "duck",
+      "text": "A race or a dropped event. Which of those two possibilities would you try to rule out first?"
+    },
+    {
+      "role": "you",
+      "text": "and walk."
+    },
+    {
+      "role": "duck",
+      "text": "Okay, ending the walk. Nice thinking out there."
+    }
+  ],
+  "metrics": [
+    {
+      "turn": 0,
+      "speech_s": 0.0,
+      "hangover_s": 0.0,
+      "stt_s": 0.0,
+      "llm_first_token_s": 0.6976854449994789,
+      "tts_first_synth_s": 0.862780639000448,
+      "reply_latency_s": null,
+      "input_tokens": 352,
+      "output_tokens": 26
+    },
+    {
+      "turn": 1,
+      "speech_s": 7.62,
+      "hangover_s": 0.7,
+      "stt_s": 3.8990113019999626,
+      "llm_first_token_s": 0.42161985100028687,
+      "tts_first_synth_s": 0.3680270089998885,
+      "reply_latency_s": 4.715330279999762,
+      "input_tokens": 394,
+      "output_tokens": 20
+    },
+    {
+      "turn": 2,
+      "speech_s": 5.636,
+      "hangover_s": 0.7,
+      "stt_s": 3.603445169999759,
+      "llm_first_token_s": 0.424514776000251,
+      "tts_first_synth_s": 0.9772708509999575,
+      "reply_latency_s": 5.074903460999849,
+      "input_tokens": 444,
+      "output_tokens": 24
+    },
+    {
+      "turn": 3,
+      "speech_s": 4.676,
+      "hangover_s": 0.7,
+      "stt_s": 4.260648899999978,
+      "llm_first_token_s": 0.42217605099995126,
+      "tts_first_synth_s": 0.6250055130003602,
+      "reply_latency_s": 5.356163739000294,
+      "input_tokens": 498,
+      "output_tokens": 23
+    },
+    {
+      "turn": 4,
+      "speech_s": 5.028,
+      "hangover_s": 0.7,
+      "stt_s": 3.8319502569993347,
+      "llm_first_token_s": 0.42221588699976564,
+      "tts_first_synth_s": 0.7030368550003914,
+      "reply_latency_s": 5.096124407999923,
+      "input_tokens": 551,
+      "output_tokens": 19
+    },
+    {
+      "turn": 5,
+      "speech_s": 5.9239999999999995,
+      "hangover_s": 0.7,
+      "stt_s": 4.746471320999262,
+      "llm_first_token_s": 0.43158941000001505,
+      "tts_first_synth_s": 0.451507727999342,
+      "reply_latency_s": 5.670667288000004,
+      "input_tokens": 608,
+      "output_tokens": 21
+    },
+    {
+      "turn": 6,
+      "speech_s": 0.9000000000000001,
+      "hangover_s": 0.7,
+      "stt_s": 3.0173169909994613,
+      "llm_first_token_s": null,
+      "tts_first_synth_s": null,
+      "reply_latency_s": null,
+      "input_tokens": 0,
+      "output_tokens": 0
+    }
+  ]
+}
