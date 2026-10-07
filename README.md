@@ -20,3 +20,15 @@ uv run python scripts/doctor.py --sentry-test   # also sends a test error to Sen
 ```
 
 The Flutter client lives in `phone/` (`cd phone && flutter run` with a phone connected).
+
+## Signals and the stuck detector
+
+```bash
+bash scripts/install_daemon.sh        # dw on PATH, Cursor extension, systemd user service (--uninstall reverses it)
+dw pytest -x                          # run builds/tests through dw so failures are counted and logged
+uv run python -m duckwalk.daemon.label            # one-key labeling: s = stuck, f = flow, k = skip, q = quit
+uv run python ml/train_detector.py                # held-out metrics + learning curve -> ml/data/
+uv run python -m duckwalk.daemon.detector --synthetic stuck   # P(stuck) for a synthetic window
+```
+
+Set `DUCKWALK_REPOS` and `TABPFN_TOKEN` in `.env` first. Runtime data stays in `~/.duckwalk` (editor and run event logs, terminal log, `windows.db`), and the editor extension logs file paths only, never contents.

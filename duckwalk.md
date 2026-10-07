@@ -111,7 +111,9 @@ MongoDB Atlas, Tiger Data, SerpApi, Backboard and Mastra: each would add a cloud
 
 ```sql
 CREATE TABLE windows (
+  id               INTEGER PRIMARY KEY,
   ts               TIMESTAMP,
+  repo             TEXT,     -- watched repo of the most-edited file, if any
   mins_since_break REAL,
   failed_builds    INT,
   same_file_edits  INT,
@@ -121,7 +123,8 @@ CREATE TABLE windows (
   nudged           BOOL,
   walked           BOOL,
   dismissed_fast   BOOL,   -- dismissed within 10s => false nudge
-  resolved_30m     BOOL    -- auto-labeled: test passed or commit landed
+  resolved_30m     BOOL,   -- auto-labeled: test passed or commit landed
+  stuck            BOOL    -- hand label: 1 stuck, 0 flow, NULL unlabeled
 );
 ```
 

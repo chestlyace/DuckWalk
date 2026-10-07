@@ -26,7 +26,17 @@ OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "gemma4:e4b")  # local default; e.
 SENTRY_DSN = os.environ.get("SENTRY_DSN", "")
 TEMPORAL_ADDRESS = os.environ.get("TEMPORAL_ADDRESS", "localhost:7233")
 NTFY_TOPIC = os.environ.get("NTFY_TOPIC", "")
-TERMINAL_LOG = os.environ.get("DUCKWALK_TERMINAL_LOG", "")  # log file whose tail is the "last terminal error"
+# Local runtime data: editor/run event logs, terminal log and windows.db. Never leaves the machine.
+HOME = Path(os.environ.get("DUCKWALK_HOME", "~/.duckwalk")).expanduser()
+EDITOR_EVENTS = HOME / "editor.jsonl"  # written by the Cursor/VS Code extension in editor/vscode
+RUN_EVENTS = HOME / "runs.jsonl"  # written by `dw`
+DB_PATH = HOME / "windows.db"
+# Log file whose tail is the "last terminal error". `dw` writes the default one.
+TERMINAL_LOG = os.environ.get("DUCKWALK_TERMINAL_LOG", "") or str(HOME / "terminal.log")
+REPOS = [Path(r).expanduser() for r in os.environ.get("DUCKWALK_REPOS", "").split(",") if r.strip()]
+WINDOW_MINUTES = 5
+BREAK_GAP_MINUTES = 5  # no editor event and no `dw` run for this long counts as a break
+STUCK_THRESHOLD = float(os.environ.get("DUCKWALK_STUCK_THRESHOLD", "0.7"))
 
 TEMPORAL_BIN = VENDOR / "bin" / "temporal"
 WHISPER_BIN = VENDOR / "whisper.cpp" / "build" / "bin" / "whisper-cli"

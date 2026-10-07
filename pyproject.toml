@@ -13,7 +13,12 @@ dependencies = [
     "httpx",
     "astral",
     "piper-tts",
+    "scikit-learn",
+    "matplotlib",
 ]
+
+[project.scripts]
+dw = "duckwalk.run:main"
 
 [build-system]
 requires = ["hatchling"]
