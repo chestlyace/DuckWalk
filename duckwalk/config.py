@@ -47,6 +47,10 @@ TTS_ENGINE = os.environ.get("DUCKWALK_TTS", "piper")  # "piper" (offline, defaul
 ELEVENLABS_API_KEY = os.environ.get("ELEVENLABS_API_KEY", "")
 ELEVENLABS_VOICE_ID = os.environ.get("ELEVENLABS_VOICE_ID", "")
 ELEVENLABS_MODEL = os.environ.get("ELEVENLABS_MODEL", "eleven_flash_v2_5")
+# Which LLM speaks as the duck: "ollama" (default), "llamacpp" (tuned model on a local llama-server), "tinker" (tuned model in the cloud)
+DUCK_BACKEND = os.environ.get("DUCK_BACKEND", "ollama")
+DUCK_MODEL = os.environ.get("DUCK_MODEL", "")  # ollama tag, or the Tinker checkpoint path; empty = OLLAMA_MODEL
+LLAMACPP_URL = os.environ.get("LLAMACPP_URL", "http://127.0.0.1:8081")
 AUDIO_INPUT = os.environ.get("DUCKWALK_AUDIO_IN", "")  # sounddevice name or index; empty = system default
 AUDIO_OUTPUT = os.environ.get("DUCKWALK_AUDIO_OUT", "")
 

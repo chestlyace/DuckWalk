@@ -17,7 +17,7 @@ import sentry_sdk
 
 from duckwalk import config
 from duckwalk.activities import llm
-from duckwalk.voice import stt
+from duckwalk.voice import backends, stt
 from duckwalk.voice.audio import EndOfScript
 from duckwalk.voice.vad import Listener
 
@@ -59,6 +59,21 @@ def is_stop_phrase(text: str) -> bool:
                for i in range(len(words) - n + 1))
 
 
+def system_prompt(summary: str) -> str:
+    return PROMPT.read_text().replace("{summary}", summary)
+
+
+def build_messages(system: str, turns: list[dict], opener: bool = False) -> list[dict]:
+    """The exact chat the LLM sees: system prompt, the turns so far, and the opener cue on the first turn.
+    The fine-tuning data is built with this same function so training matches deployment."""
+    msgs = [{"role": "system", "content": system}]
+    for t in turns:
+        msgs.append({"role": "assistant" if t["role"] == "duck" else "user", "content": t["text"]})
+    if opener:
+        msgs.append({"role": "user", "content": OPENER_CUE})
+    return msgs
+
+
 @dataclass
 class TurnMetrics:
     turn: int  # 0 is the duck's opening question
@@ -83,7 +98,7 @@ class Duck:
         self.mic, self.speaker, self.on_tick = mic, speaker, on_tick
         self.path = transcript_path
         self.max_seconds = max_seconds if max_seconds is not None else config.VOICE_MAX_MINUTES * 60
-        self.system = PROMPT.read_text().replace("{summary}", summary)
+        self.system = system_prompt(summary)
         self.turns: list[dict] = []  # {"role": "duck"|"you", "text": ...}
         self.metrics: list[TurnMetrics] = []
         self.started = datetime.now().isoformat(timespec="seconds")
@@ -150,16 +165,11 @@ class Duck:
         return {"ended": ended, "turns": sum(t["role"] == "you" for t in self.turns), "transcript": self.transcript_text()}
 
     def _messages(self, opener: bool) -> list[dict]:
-        msgs = [{"role": "system", "content": self.system}]
-        for t in self.turns:
-            msgs.append({"role": "assistant" if t["role"] == "duck" else "user", "content": t["text"]})
-        if opener:
-            msgs.append({"role": "user", "content": OPENER_CUE})
-        return msgs
+        return build_messages(self.system, self.turns, opener)
 
     def _reply(self, m: TurnMetrics, opener: bool = False, decided_at: float | None = None) -> None:
         self.speaker.new_turn()
-        stream = llm.ChatStream(self._messages(opener), stage="duck")
+        stream = backends.duck_stream(self._messages(opener))
         spoken = []
         for sentence in sentences(stream):
             sentence = _NOT_SPOKEN.sub("", sentence).strip()
@@ -195,10 +205,12 @@ class Duck:
         if not self.path:
             return
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        data = {"started": self.started, "model": config.OLLAMA_MODEL, "tts": self.speaker.tts.name,
-                "turns": self.turns, "metrics": [asdict(m) for m in self.metrics]}
+        duck_model = config.DUCK_MODEL or config.OLLAMA_MODEL
+        data = {"started": self.started, "model": duck_model, "backend": config.DUCK_BACKEND,
+                "tts": self.speaker.tts.name, "turns": self.turns, "metrics": [asdict(m) for m in self.metrics]}
         self.path.write_text(json.dumps(data, indent=2) + "\n")
         lines = [f"# Walk conversation {self.path.stem}", "",
-                 f"Started {self.started}. Model `{config.OLLAMA_MODEL}`, TTS `{self.speaker.tts.name}`, STT `{config.WHISPER_MODEL.name}`.", ""]
+                 f"Started {self.started}. Model `{duck_model}` ({config.DUCK_BACKEND}), "
+                 f"TTS `{self.speaker.tts.name}`, STT `{config.WHISPER_MODEL.name}`.", ""]
         lines += [f"**{'Duck' if t['role'] == 'duck' else 'You'}:** {t['text']}\n" for t in self.turns]
         self.path.with_suffix(".md").write_text("\n".join(lines))

@@ -1,0 +1,20 @@
+{
+  "model": "ollama:gemma4:31b-cloud",
+  "n": 50,
+  "mean_score": 0.975,
+  "all_pass_rate": 0.8,
+  "per_criterion": {
+    "asks_question": 1.0,
+    "one_question": 0.8,
+    "concise": 1.0,
+    "plain_speech": 1.0,
+    "no_fix_phrasing": 1.0,
+    "refers_to_problem": 1.0,
+    "no_direct_fix": 1.0,
+    "not_leading": 1.0
+  },
+  "median_total_s": 0.6296071774995653,
+  "median_first_token_s": 0.4216313370006901,
+  "mean_output_tokens": 20.42,
+  "mean_words": 16.36
+}

@@ -60,3 +60,9 @@ uv run python -m duckwalk.voice.report eval/voice/transcripts               # pe
 ```
 
 Transcripts and per-turn metrics are saved to `~/.duckwalk/transcripts/`. Piper is the offline default. Set `DUCKWALK_TTS=elevenlabs`, `ELEVENLABS_API_KEY` and `ELEVENLABS_VOICE_ID` in `.env` to opt in to ElevenLabs, which sends the duck's replies to ElevenLabs' servers. `starter trigger --voice-script FILE` runs a whole walk session with a scripted user.
+
+## Fine-tuned duck (Tinker)
+
+`ml/tinker/` holds the whole pipeline: `rubric.py` (8 pass/fail criteria), `build_eval.py` (the frozen 50-prompt eval set; its hash is checked by every script), `gen_train.py` (teacher dialogues filtered by the rubric), `train.py` (LoRA fine-tune of Qwen3.5-4B on Tinker, `--dry-run` works without a key), `run_eval.py` and `judge2.py` (grading), and `make_results.py` (writes `eval/results.md`). Gemma is not offered by Tinker, so the tuned duck is Qwen3.5-4B; Gemma still writes the breadcrumb, nudge and brief and generated the training data.
+
+The duck's LLM is chosen with `DUCK_BACKEND` in `.env`: `ollama` (default), `tinker` (the tuned model in Tinker's cloud, with the checkpoint path in `DUCK_MODEL`) or `llamacpp` (the tuned model on a local llama-server). Only the `llamacpp` setting keeps everything on your machine.

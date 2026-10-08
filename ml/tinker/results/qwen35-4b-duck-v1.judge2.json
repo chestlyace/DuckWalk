@@ -1,0 +1,9 @@
+{
+  "judge": "gpt-oss:120b-cloud",
+  "n": 50,
+  "verdicts": {
+    "asks_only": 45,
+    "leading": 4,
+    "unparsed": 1
+  }
+}

@@ -119,3 +119,41 @@ class ChatStream:
             span.set_data("gen_ai.usage.output_tokens", self.output_tokens)
             span.set_data("gen_ai.usage.total_tokens", self.input_tokens + self.output_tokens)
             span.set_status("ok")
+
+
+def chat(messages: list[dict], *, stage: str, model: str | None = None, temperature: float | None = None,
+         max_tokens: int | None = None, json_mode: bool = False, timeout_s: float = 90.0) -> LLMResult:
+    """Non-streaming /api/chat call with a conversation, a temperature and optional JSON output."""
+    model = model or config.OLLAMA_MODEL
+    options = {k: v for k, v in {"temperature": temperature, "num_predict": max_tokens}.items() if v is not None}
+    body = {"model": model, "messages": messages, "stream": False, "think": False, "options": options}
+    if json_mode:
+        body["format"] = "json"
+    with sentry_sdk.start_span(op="gen_ai.chat", name=f"chat {model}") as span:
+        span.set_tag("duckwalk.stage", stage)
+        span.set_data("gen_ai.system", "ollama")
+        span.set_data("gen_ai.operation.name", "chat")
+        span.set_data("gen_ai.request.model", model)
+        try:
+            res = httpx.post(f"{config.OLLAMA_URL}/api/chat", json=body, timeout=timeout_s)
+        except httpx.TimeoutException:
+            span.set_status("deadline_exceeded")
+            raise OllamaError(f"{stage}: Ollama timed out after {timeout_s:.0f}s") from None
+        except httpx.HTTPError as e:
+            span.set_status("unavailable")
+            raise OllamaError(f"{stage}: Ollama not reachable at {config.OLLAMA_URL} ({e.__class__.__name__})") from None
+        if res.is_error:
+            span.set_status("internal_error")
+            raise OllamaError(f"{stage}: Ollama returned {res.status_code}: {res.json().get('error', res.text)[:200]}")
+        data = res.json()
+        result = LLMResult(
+            text=data["message"]["content"].strip(),
+            model=data.get("model", model),
+            input_tokens=data.get("prompt_eval_count", 0),
+            output_tokens=data.get("eval_count", 0),
+            duration_s=data.get("total_duration", 0) / 1e9,
+        )
+        span.set_data("gen_ai.usage.input_tokens", result.input_tokens)
+        span.set_data("gen_ai.usage.output_tokens", result.output_tokens)
+        span.set_status("ok")
+        return result

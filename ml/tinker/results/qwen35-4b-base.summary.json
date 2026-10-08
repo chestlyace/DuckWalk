@@ -1,0 +1,20 @@
+{
+  "model": "tinker-base:Qwen/Qwen3.5-4B",
+  "n": 50,
+  "mean_score": 0.9475,
+  "all_pass_rate": 0.68,
+  "per_criterion": {
+    "asks_question": 0.98,
+    "one_question": 0.98,
+    "concise": 1.0,
+    "plain_speech": 0.9,
+    "no_fix_phrasing": 1.0,
+    "refers_to_problem": 0.98,
+    "no_direct_fix": 0.98,
+    "not_leading": 0.76
+  },
+  "median_total_s": 2.0627708315005293,
+  "median_first_token_s": null,
+  "mean_output_tokens": 19.48,
+  "mean_words": 15.92
+}

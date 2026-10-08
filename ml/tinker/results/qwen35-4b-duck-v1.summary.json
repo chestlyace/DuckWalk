@@ -1,0 +1,20 @@
+{
+  "model": "tinker:tinker://fab7840b-f6ef-5e00-87d3-323b24d302cf:train:0/sampler_weights/qwen35-4b-duck-v1",
+  "n": 50,
+  "mean_score": 0.9975,
+  "all_pass_rate": 0.98,
+  "per_criterion": {
+    "asks_question": 1.0,
+    "one_question": 1.0,
+    "concise": 1.0,
+    "plain_speech": 1.0,
+    "no_fix_phrasing": 1.0,
+    "refers_to_problem": 0.98,
+    "no_direct_fix": 1.0,
+    "not_leading": 1.0
+  },
+  "median_total_s": 2.0734334900007525,
+  "median_first_token_s": null,
+  "mean_output_tokens": 19.16,
+  "mean_words": 15.86
+}

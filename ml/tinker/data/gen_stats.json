@@ -1,0 +1,1 @@
+{"candidates": 2429, "verdict_asks_only": 2342, "fail_asks_question": 0, "fail_one_question": 19, "fail_concise": 0, "fail_plain_speech": 10, "fail_no_fix_phrasing": 9, "fail_refers_to_problem": 34, "fail_no_direct_fix": 83, "fail_not_leading": 87, "first_try": 2350, "first_try_pass": 2297, "verdict_not_judged": 72, "verdict_gives_fix": 11, "verdict_leading": 4}
